@@ -1,5 +1,12 @@
 terraform {
   required_version = "> 0.12.0"
+  backend "remote" {
+    organization = "vinnief5dev"
+
+    workspaces {
+      name = "azure-bigip-bigiq-remo"
+    }
+  }
 }
 
 provider "azurerm" {

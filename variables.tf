@@ -2,10 +2,10 @@ variable "azurerm_instances" {
   default = "1"
 }
 variable "uname" {
-  default = "remo"
+  default = "xadmin"
 }
 variable "prefix" {
-  default = "remo"
+  default = "no"
 }
 variable "network_name" {
   default = "bigip_network"
@@ -40,11 +40,11 @@ variable "specs" {
   default = {
     default = {
       location      = "westus2"
-      name_rg       = "remo_bigip_rg"
+      name_rg       = "no_bigip_rg"
       instance_type = "Standard_DS3_v2"
       environment   = "This env is using BIG-IP"
       owner         = "Remo Mattei"
-      f5version     = "15.1.004000" 
+      f5version     = "15.1.004000"
       plan_name     = "f5-big-ltm-1slot-byol"
       offer         = "f5-big-ip-byol"
       product       = "f5-big-ip-byol"

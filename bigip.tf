@@ -49,6 +49,7 @@ resource "azurerm_linux_virtual_machine" "virtualmachine" {
 
 ### Setup Onboarding scripts
 data "template_file" "vm_onboard" {
+  depends_on = [azurerm_network_interface.Untrust, azurerm_network_interface.Trust]
   template = "${file("${path.module}/onboard.yml")}"
   vars = {
     DO_URL                      = var.DO_URL
@@ -68,13 +69,16 @@ data "template_file" "vm_onboard" {
     name_servers                = var.dnsresolvers
     search_domain               = var.searchdomain
     default_gw                  = var.specs[terraform.workspace]["default_gw"]
-    external_ip                 = azurerm_network_interface.Untrust[0].private_ip_address
-    internal_ip                 = azurerm_network_interface.Trust[0].private_ip_address
+#    external_ip                 = #azurerm_network_interface.Untrust.private_ip_address
+#    internal_ip                 = #azurerm_network_interface.Trust.private_ip_address
+    external_ip                 = "1.2.3.4"
+    internal_ip                 = "1.2.3.4"
     bigipuser                   = var.specs[terraform.workspace]["uname"]
     bigippass                   = random_password.dpasswrd.result
   }
 }
 data "template_file" "ansible_info" {
+  depends_on = [azurerm_linux_virtual_machine.virtualmachine]
   template = "${file("./ansible/bigip.txt")}"
   vars = {
     mgmt     = azurerm_linux_virtual_machine.virtualmachine[0].public_ip_address,

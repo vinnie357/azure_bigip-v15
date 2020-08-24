@@ -26,6 +26,7 @@ resource "azurerm_public_ip" "untrust_pip_sec" {
 }
 
 data "azurerm_public_ip" "untrust_pip_sec" {
+  depends_on          = [azurerm_resource_group.azmain]
   name                = azurerm_public_ip.untrust_pip_sec[0].name
   resource_group_name = azurerm_linux_virtual_machine.virtualmachine[0].resource_group_name
 }
@@ -49,12 +50,11 @@ resource "azurerm_network_interface" "Management" {
 
 # Create the network interfaces
 resource "azurerm_network_interface" "Untrust" {
-  depends_on           = [azurerm_subnet.Untrust]
-  count                = var.azurerm_instances
-  name                 = "nic-${count.index}-untrust"
-  location             = azurerm_resource_group.azmain.location
-  resource_group_name  = azurerm_resource_group.azmain.name
-  enable_ip_forwarding = true
+  count                         = var.azurerm_instances
+  name                          = "nic-${count.index}-untrust"
+  location                      = azurerm_resource_group.azmain.location
+  resource_group_name           = azurerm_resource_group.azmain.name
+  enable_ip_forwarding          = true
   enable_accelerated_networking = true
 
   ip_configuration {
@@ -77,12 +77,12 @@ resource "azurerm_network_interface" "Untrust" {
 
 # Create the network interfaces
 resource "azurerm_network_interface" "Trust" {
-  depends_on           = [azurerm_subnet.Trust]
-  count                = var.azurerm_instances
-  name                 = "nic-${count.index}-trust"
-  location             = azurerm_resource_group.azmain.location
-  resource_group_name  = azurerm_resource_group.azmain.name
-  enable_ip_forwarding = true
+  depends_on                    = [azurerm_subnet.Trust]
+  count                         = var.azurerm_instances
+  name                          = "nic-${count.index}-trust"
+  location                      = azurerm_resource_group.azmain.location
+  resource_group_name           = azurerm_resource_group.azmain.name
+  enable_ip_forwarding          = true
   enable_accelerated_networking = true
 
   ip_configuration {
